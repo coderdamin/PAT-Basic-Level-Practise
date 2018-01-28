@@ -20,37 +20,41 @@ using namespace std;
 
 int GetCallatz(int nNumber);
 int main() {
-    int nCount = 0;
-    cin >> nCount;
-    set<int> sNumber;
-    int* anNumber = new int[nCount];
-    int nCallatz = 0;
-    for (int i = 0; i < nCount; ++i) {
-        cin >> anNumber[i];
-        sNumber.insert(anNumber[i]);
-    }
-    for (int i = 0; i < nCount; ++i) {
-        while ((nCallatz = GetCallatz(anNumber[i])) != 1) {
-            if (sNumber.find(nCallatz) != sNumber.end()) {
-                sNumber.erase(nCallatz);
-            }
-        }
-    }
-    bool bFirst = false;
-    for (auto nNumber : sNumber) {
-        if (bFirst) {
-            cout << nNumber;
-            bFirst = true;
-        }else{
-            cout << ' ' << nNumber;
-        }
-    }
-    cout << endl;
-    sNumber.clear();
-    delete[] anNumber;
-    return 0;
+	int nCount = 0;
+	cin >> nCount;
+	set<int> sNumber;
+	int* anNumber = new int[nCount];
+	int nCallatz = 0;
+	for (int i = 0; i < nCount; ++i) {
+		cin >> anNumber[i];
+		sNumber.insert(anNumber[i]);
+	}
+	for (int i = 0; i < nCount; ++i) {
+		nCallatz = anNumber[i];
+		while ((nCallatz = GetCallatz(nCallatz)) != 1) {
+			if (sNumber.find(nCallatz) != sNumber.end()) {
+				sNumber.erase(nCallatz);
+			}
+		}
+	}
+	bool bFirst = true;
+	//for (auto nNumber : sNumber) {
+	set<int>::reverse_iterator iter = sNumber.rbegin();
+	for (; iter != sNumber.rend(); ++iter) {
+		if (bFirst) {
+			cout << *iter;
+			bFirst = false;
+		}
+		else {
+			cout << ' ' << *iter;
+		}
+	}
+	cout << endl;
+	sNumber.clear();
+	delete[] anNumber;
+	return 0;
 }
 
 int GetCallatz(int nNumber) {
-    return ((nNumber & 0x00000001) ? (3 * nNumber + 1) : (nNumber)) / 2;
+	return ((nNumber & 0x00000001) ? (3 * nNumber + 1) : (nNumber)) / 2;
 }
