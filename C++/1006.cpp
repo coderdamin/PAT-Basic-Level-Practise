@@ -19,8 +19,34 @@
 using namespace std;
 
 int main() {
-    char acInput[4] = {0};
-    cin >> acInput;
-    
+    //char acInput[4] = {0};
+    //cin >> acInput;
+	int nInput = 0;
+	cin >> nInput;
+	if (nInput == 0) {
+		cout << 0 << endl;
+		return 0;
+	}
+	int nPart = 0;
+	// 百位
+	nPart = nInput / 100;
+	while (nPart > 0) {
+		cout << 'B';
+		--nPart;
+	}
+	// 十位
+	nInput = nInput % 100;
+	nPart = nInput / 10;
+	while (nPart > 0) {
+		cout << 'S';
+		--nPart;
+	}
+	// 个位
+	nInput = nInput % 10;
+	nPart = nInput;
+	for (int i = 1; i <= nPart; ++i) {
+		cout << i;
+	}
+	cout << endl;
     return 0;
 }
