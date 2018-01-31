@@ -39,8 +39,37 @@
 //	10000001 64 90
 
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
+class Student {
+public:
+	Student() {
+		nNumber = 0;
+		nDeScore = 0;
+		nCaiScore = 0;
+	}
+	~Student() {}
+public:
+	int nNumber;
+	int nDeScore;
+	int nCaiScore;
+};
+
+bool StudentSortFunc(Student& s1, Student& s2);
 int main() {
+	int nCount = 0;
+	int nLower = 0;
+	int nHighclass = 0;
+	cin >> nCount >> nLower >> nHighclass;
+	Student aStudentList = new Student[nCount];
+	for (int i = 0; i < nCount; ++i){
+		cin >> aStudentList[i].nNumber >> aStudentList[i].nDeScore >> aStudentList[i].nCaiScore;
+	}
+	sort(aStudentList, , StudentSortFunc);
 	return 0;
+}
+
+bool StudentSortFunc(Student& s1, Student& s2) {
+
 }
