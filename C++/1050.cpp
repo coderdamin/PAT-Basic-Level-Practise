@@ -55,6 +55,34 @@ void CalcRowAndColumn(int nCount, int& nRow, int& nColumn) {
 
 void Solution_1(int* anNumber, int nCount) {
 	// 按行输出
+	int nRow = 0;
+	int nColumn = 0;
+	CalcRowAndColumn(nCount, &nRow, &nColumn);
+	int nRowBase = 0;
+	
+	// 第一行
+	for (int i = 0; i < nColumn; ++i) {
+		cout << anNumber[i];
+	}
+	// 中间 nRow - 2 行
+	for (int i = 1; i < nColumn - 2; ++i) {
+		// 前i列
+		for (int j = 0; j < i; ++j) {
+			//cout << 2 * (nRow + nColumn) - 3 - i;
+		}
+		for () {
+
+		}
+		// 后i列
+		for () {
+
+		}
+	}
+	// 最后一行
+	nRowBase = nColumn + nRow - 2;
+	for (int i = nColumn; i >= 0; --i) {
+		cout << anNumber[nRowBase + i];
+	}
 }
 
 void Solution_2(int* anNumber, int nCount) {
