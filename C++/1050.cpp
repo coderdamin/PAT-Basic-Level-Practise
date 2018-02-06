@@ -15,15 +15,18 @@
 //	58 60 76
 
 #include <iostream>
-#include <algonrithm>
+#include <algorithm>
 #include <math.h>
 using namespace std;
+
+#define MATH_MIN(val1, val2) (val1) < (val2) ? (val1) : (val2)
 
 void Solution_1(int* anNumber, int nCount);
 void Solution_2(int* anNumber, int nCount);
 void Solution_3(int* anNumber, int nCount);
-bool NumberSortFunc(int number1, int number2);
+bool NumberSortFunc(int nNumber1, int nNumber2);
 void CalcRowAndColumn(int nCount, int& nRow, int& nColumn);
+int GetValueFromMatrix(int nX, int nY, int nRow, int nColumn);
 int main() {
 	int nCount = 0;
 	cin >> nCount;
@@ -31,13 +34,14 @@ int main() {
 	for (int i = 0; i < nCount; ++i) {
 		cin >> anNumber[i];
 	}
-	sort(anNumber, &anNumber[nCount]);
+	sort(anNumber, &anNumber[nCount], NumberSortFunc);
 
+	Solution_1(anNumber, nCount);
 	return 0;
 }
 
-bool NumberSortFunc(int number1, int number2) {
-	return number1 > number2;
+bool NumberSortFunc(int nNumber1, int nNumber2) {
+	return nNumber1 > nNumber2;
 }
 
 void CalcRowAndColumn(int nCount, int& nRow, int& nColumn) {
@@ -46,10 +50,25 @@ void CalcRowAndColumn(int nCount, int& nRow, int& nColumn) {
 		nRow += 1;
 	}
 	for (int i = nRow; i <= nCount; ++i) {
-		if (nCount % nRow == 0) {
-			nColumn = nCount / nRow;
+		if (nCount % i == 0) {
+			nRow = i;
+			nColumn = nCount / i;
 			break;
 		}
+	}
+}
+
+int GetValueFromMatrix(int nX, int nY, int nRow, int nColumn) {
+	int nLapIndex = MATH_MIN(MATH_MIN(nX, nY), MATH_MIN(nColumn - 1 - nX, nRow - 1 - nY));
+	int nDistance = nX + nY - 2 * nLapIndex;
+	if ((nY == nLapIndex || nX == nColumn - 1 - nLapIndex) // 向右\向下
+		|| ((nLapIndex * 2 + 1) == nColumn)){
+		int nLapBegin = 2 * nLapIndex * (nRow + nColumn - 2 * nLapIndex) + 1;
+		return nLapBegin + nDistance;
+	}
+	else{
+		int nNextLapBegin = 2 * (nLapIndex + 1) * (nRow + nColumn - 2 * (nLapIndex + 1)) + 1;
+		return nNextLapBegin - nDistance;
 	}
 }
 
@@ -57,45 +76,33 @@ void Solution_1(int* anNumber, int nCount) {
 	// 按行输出
 	int nRow = 0;
 	int nColumn = 0;
-	CalcRowAndColumn(nCount, &nRow, &nColumn);
-	int nRowBase = 0;
-	
-	// 第一行
-	for (int i = 0; i < nColumn; ++i) {
-		cout << anNumber[i];
-	}
-	// 中间 nRow - 2 行
-	for (int i = 1; i < nColumn - 2; ++i) {
-		// 前i列
-		for (int j = 0; j < i; ++j) {
-			//cout << 2 * (nRow + nColumn) - 3 - i;
+	CalcRowAndColumn(nCount, nRow, nColumn);
+	for (int y = 0; y < nRow; ++y) {
+		for (int x = 0; x < nColumn; ++x){
+			cout << anNumber[GetValueFromMatrix(x, y, nRow, nColumn) - 1];
+			//cout << GetValueFromMatrix(x, y, nRow, nColumn);
+			if (x < nColumn - 1) {
+				cout << ' ';
+			}
 		}
-		for () {
-
-		}
-		// 后i列
-		for () {
-
+		if (y < nRow - 1) {
+			cout << '\n';
 		}
 	}
-	// 最后一行
-	nRowBase = nColumn + nRow - 2;
-	for (int i = nColumn; i >= 0; --i) {
-		cout << anNumber[nRowBase + i];
-	}
+	cout << endl;
 }
 
 void Solution_2(int* anNumber, int nCount) {
 	// 按圈插入到一维数组
 	int nRow = 0;
 	int nColumn = 0;
-	CalcRowAndColumn(nCount, &nRow, &nColumn);
+	CalcRowAndColumn(nCount, nRow, nColumn);
 	int nLoop = (nColumn + 1) >> 1;
 	int* anOutbuf = new int[nCount];
 	int nRowBase = 0;
 	for (int i = 0; i < nLoop; ++i) {
 		for (int j = 0; j < nColumn - 2 * i; ++j) {
-			anOutbuf[nRowBase + j] = anNumber[index++];
+			//anOutbuf[nRowBase + j] = anNumber[index++];
 		}
 	}
 	delete[] anOutbuf;

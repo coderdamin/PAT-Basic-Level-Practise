@@ -37,10 +37,14 @@ int main() {
 	int nCount = 0;
 	cin >> nCount;
 	int(*anEmojiInfo)[5] = new int[nCount][5];
+	int nTemp = 0;
 	for (int i = 0; i < nCount; ++i) {
-		cin >> anEmojiInfo[i][0] >> anEmojiInfo[i][1] >> anEmojiInfo[i][2] >> anEmojiInfo[i][3] >> anEmojiInfo[i][4];
+		for (int j = 0; j < 5; ++j) {
+			cin >> nTemp;
+			anEmojiInfo[i][j] = nTemp - 1;
+		}
 	}
-	char acEmoji[21] = { 0 };
+
 	//◊Û ÷°¢◊Û—€°¢ø⁄°¢”“—€°¢”“ ÷
 	for (int i = 0; i < nCount; ++i) {
 		if (i > 0) {
