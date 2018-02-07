@@ -36,7 +36,7 @@ using namespace std;
 typedef unsigned short UINT16;
 typedef unsigned int UINT32;
 typedef struct {
-	char acName[9] = { 0 };
+	char acName[9];
 	UINT32 uHeight;
 } People;
 
@@ -50,10 +50,54 @@ int main() {
 	}
 	sort(aPeopleList, &aPeopleList[nCount], PeopleListSortFunc);
 
+	int nColumn = nCount;
+	int nCurLine = nCount;
+	if (nCount > nRows){
+		nColumn = (nCount / nRows);
+		nCurLine = nCount - nColumn * (nRows - 1);
+	}
+	else{
+		nRows = 1;
+	}
+
+	unsigned short uIndex = 0;
+	unsigned short uIntTmp = 0;
+	unsigned short uLineBase = 0;
+	for (int i = 0; i <nRows; ++i){
+		uIndex = uLineBase + (nCurLine & 0xfffffffe) - 1;
+		for (int j = 0; j < nCurLine; ++j){
+			cout << aPeopleList[uIndex].acName;
+			uIntTmp = nCurLine >> 1;
+			if (j < uIntTmp) {
+				if (j == uIntTmp - 1) {
+					uIndex = uLineBase + 0;
+				}
+				else{
+					uIndex -= 2;
+				}
+			}
+			else{
+				uIndex += 2;
+			}
+			if (j < nCurLine - 1){
+				cout << ' ';
+			}
+		}
+		uLineBase += nCurLine;
+		nCurLine = nColumn;
+		if (i < nRows - 1){
+			cout << '\n';
+		}
+	}
+	cout << endl;
+	delete[] aPeopleList;
 
 	return 0;
 }
 
 bool PeopleListSortFunc(People& p1, People& p2) {
+	if (p1.uHeight == p2.uHeight){
+		return (strcmp(p1.acName, p2.acName) < 0);
+	}
 	return (p1.uHeight > p2.uHeight);
 }
