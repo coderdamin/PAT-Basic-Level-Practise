@@ -39,7 +39,72 @@
 #include <iostream>
 using namespace std;
 
+int anColors[1 << 24] = { 0 }; // Õ»²»¹»
 int main() {
+	int nRows = 0, nColumn = 0, nTOL = 0;
+	cin >> nColumn >> nRows >> nTOL;
+	int** anImage = new int*[nRows];
+	for (int i = 0; i < nRows; ++i) {
+		anImage[i] = new int[nColumn];
+		for (int j = 0; j < nColumn; ++j) {
+			cin >> anImage[i][j];
+			anColors[anImage[i][j]] += 1;
+		}
+	}
+
+	bool bRight = false;
+	const int anOffset[8][2] = {
+		{ -1, -1 }, { 0, -1 }, { 1, -1 }
+		, { -1, 0 }, { 1, 0 }
+		, { -1, 1 }, { 0, 1 }, { 1, 1 }
+	};
+	int nTagX = 0, nTagY = 0;
+	int nTOLCount = 0;
+	for (int i = 0; i < nRows; ++i) {
+		for (int j = 0; j < nColumn; ++j) {
+			if (anColors[anImage[i][j]] > 1){
+				continue;
+			}
+			bRight = false;
+			for (int k = 0; k < 8; ++k) {
+				if (((j + anOffset[k][0] >= 0) && (j + anOffset[k][0] < nColumn))
+					&& ((i + anOffset[k][1] >= 0) && (i + anOffset[k][1] < nRows))){
+					if ((anImage[i][j] - anImage[i + anOffset[k][1]][j + anOffset[k][0]] <= nTOL)
+						&& (anImage[i + anOffset[k][1]][j + anOffset[k][0]] - anImage[i][j] <= nTOL)){
+						bRight = true;
+						break;
+					}
+				}
+			}
+			if (!bRight) {
+				if (nTOLCount == 0){
+					nTagX = j; nTagY = i;
+					nTOLCount = 1;
+				}
+				else{
+					nTOLCount = 2;
+					break;
+				}
+			}
+		}
+		if (nTOLCount > 1) {
+			break;
+		}
+	}
+	if (nTOLCount == 0) {
+		cout << "Not Exist" << endl;
+	}
+	else if (nTOLCount == 1) {
+		cout << '(' << nTagX + 1 << ", " << nTagY + 1 << "): " << anImage[nTagY][nTagX] << endl;
+	}
+	else{
+		cout << "Not Unique" << endl;
+	}
+
+	for (int i = 0; i < nRows; ++i) {
+		delete[] anImage[i];
+	}
+	delete[] anImage;
 
 	return 0;
 }
